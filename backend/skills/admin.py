@@ -1,5 +1,6 @@
-from django.contrib import admin
-from .models import Skill, UserSkill
+from django.apps import AppConfig
 
-admin.site.register(Skill)
-admin.site.register(UserSkill)
+
+class SkillsConfig(AppConfig):
+    default_auto_field = 'django.db.models.BigAutoField'
+    name = 'skills'

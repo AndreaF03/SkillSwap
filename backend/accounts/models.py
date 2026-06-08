@@ -3,6 +3,7 @@ from django.db import models
 
 
 class User(AbstractUser):
+
     full_name = models.CharField(
         max_length=255,
         blank=True
@@ -17,7 +18,10 @@ class User(AbstractUser):
         blank=True
     )
 
-    profile_picture = models.URLField(blank=True, null=True)
+    profile_picture = models.URLField(
+        blank=True,
+        null=True
+    )
 
     credits = models.IntegerField(
         default=0
@@ -26,15 +30,11 @@ class User(AbstractUser):
     trust_score = models.FloatField(
         default=0.0
     )
-class Skill(models.Model):
 
-    name = models.CharField(
+    availability = models.CharField(
         max_length=100,
-        unique=True
+        blank=True
     )
 
-    category = models.CharField(
-        max_length=100
-    )
     def __str__(self):
         return self.username

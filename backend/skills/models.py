@@ -39,4 +39,4 @@ class UserSkill(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.username} - {self.skill.name} ({self.skill_type})"
+        return f"{self.user.username} - {self.skill.name}"
