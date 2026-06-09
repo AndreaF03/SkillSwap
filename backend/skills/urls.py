@@ -3,14 +3,13 @@ from django.urls import path
 from .views import (
     SkillListView,
     UserSkillCreateView,
-    UserSkillListView
+    UserSkillListView,
+    SearchUsersView,
+    MatchSuggestionsView,
 )
 
 urlpatterns = [
-    path(
-        "",
-        SkillListView.as_view()
-    ),
+    path("", SkillListView.as_view()),
 
     path(
         "add/",
@@ -21,23 +20,15 @@ urlpatterns = [
         "my-skills/",
         UserSkillListView.as_view()
     ),
-]
-from .views import (
-    SkillListView,
-    UserSkillCreateView,
-    UserSkillListView,
-    SearchUsersView,
-)
-
-urlpatterns = [
-    path("", SkillListView.as_view()),
-
-    path("add/", UserSkillCreateView.as_view()),
-
-    path("my-skills/", UserSkillListView.as_view()),
 
     path(
         "search/",
-        SearchUsersView.as_view()
+        SearchUsersView.as_view(),
+        name="search-users"
     ),
+    path(
+    "matches/",
+    MatchSuggestionsView.as_view(),
+    name="matches"
+),
 ]

@@ -8,4 +8,12 @@ urlpatterns = [
     "api/skills/",
     include("skills.urls")
 ),
+path(
+    "api/exchange/",
+    include("exchange.urls")
+),
+path(
+    "api/ai/",
+    include("ai_features.urls")
+),
 ]

@@ -40,3 +40,7 @@ class ProfileSerializer(serializers.ModelSerializer):
             "credits",
             "trust_score",
         ]
+from rest_framework import serializers
+
+
+

@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'skills',
     'exchange',
     'reviews',
+    'community',
+    'ai_features',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +141,10 @@ REST_FRAMEWORK = {
 
 CORS_ALLOW_ALL_ORIGINS = True
 AUTH_USER_MODEL = 'accounts.User'
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")

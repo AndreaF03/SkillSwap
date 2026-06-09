@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 
 class Review(models.Model):
 
@@ -28,6 +29,11 @@ class Review(models.Model):
     created_at = models.DateTimeField(
         auto_now_add=True
     )
+    def clean(self):
+        if self.reviewer == self.reviewed_user:
+            raise ValidationError(
+                "Users cannot review themselves."
+            )
 
     def __str__(self):
         return (
