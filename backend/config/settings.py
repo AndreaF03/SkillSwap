@@ -3,24 +3,36 @@ import os
 import dj_database_url
 from dotenv import load_dotenv
 
-# Base directory
+# --------------------------------------------------
+# Base Directory
+# --------------------------------------------------
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Load .env file
+# Load Environment Variables
 load_dotenv(BASE_DIR / ".env")
 
+# --------------------------------------------------
 # Security
+# --------------------------------------------------
+
 SECRET_KEY = os.getenv(
-    "SECRET_KEY",
-    "django-insecure-ev5wb=a3sgp@syaff_p0l36ra=_uyvs8uqu)6@a_db6a%vd4t_"
+    "SECRET_KEY"
 )
 
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv(
+    "ALLOWED_HOSTS",
+    "*"
+).split(",")
 
+# --------------------------------------------------
 # Applications
+# --------------------------------------------------
+
 INSTALLED_APPS = [
+    # Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -28,11 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Third-party
+    # Third Party
     'rest_framework',
     'corsheaders',
 
-    # Local apps
+    # Local Apps
     'accounts',
     'skills',
     'exchange',
@@ -41,10 +53,15 @@ INSTALLED_APPS = [
     'ai_features',
 ]
 
+# --------------------------------------------------
 # Middleware
+# --------------------------------------------------
+
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,9 +70,18 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# --------------------------------------------------
+# URLs / WSGI
+# --------------------------------------------------
+
 ROOT_URLCONF = 'config.urls'
 
+WSGI_APPLICATION = 'config.wsgi.application'
+
+# --------------------------------------------------
 # Templates
+# --------------------------------------------------
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -71,18 +97,23 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'config.wsgi.application'
-
+# --------------------------------------------------
 # Database (Neon PostgreSQL)
+# --------------------------------------------------
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
-print("DATABASE_URL =", DATABASE_URL)
-
 DATABASES = {
-    "default": dj_database_url.parse(DATABASE_URL)
+    "default": dj_database_url.parse(
+        DATABASE_URL,
+        conn_max_age=600
+    )
 }
 
-# Password validation
+# --------------------------------------------------
+# Password Validation
+# --------------------------------------------------
+
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -98,7 +129,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# --------------------------------------------------
 # Internationalization
+# --------------------------------------------------
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -107,24 +141,43 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files
-STATIC_URL = 'static/'
+# --------------------------------------------------
+# Static Files
+# --------------------------------------------------
 
-# Default primary key
+STATIC_URL = 'static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+# --------------------------------------------------
+# Default Primary Key
+# --------------------------------------------------
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# --------------------------------------------------
 # DRF
+# --------------------------------------------------
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
 }
 
+# --------------------------------------------------
 # CORS
+# --------------------------------------------------
+
 CORS_ALLOW_ALL_ORIGINS = True
 
+# --------------------------------------------------
 # Custom User Model
+# --------------------------------------------------
+
 AUTH_USER_MODEL = 'accounts.User'
 
-# Gemini API
+# --------------------------------------------------
+# Gemini AI
+# --------------------------------------------------
+
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
