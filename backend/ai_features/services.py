@@ -1,9 +1,31 @@
 from google import genai
-from django.conf import settings
+import os
 
-client = genai.Client(
-    api_key=settings.GEMINI_API_KEY
-)
+
+def get_client():
+    api_key = os.getenv("GEMINI_API_KEY")
+
+    if not api_key:
+        raise ValueError("GEMINI_API_KEY is not configured")
+
+    return genai.Client(api_key=api_key)
+
+
+def generate_response(prompt):
+    try:
+        client = get_client()
+
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
+
+        return response.text
+
+    except Exception as e:
+        return f"AI Error: {str(e)}"
+
+
 def get_related_skills(skill_name):
 
     prompt = f"""
@@ -16,18 +38,6 @@ def get_related_skills(skill_name):
     """
 
     return generate_response(prompt)
-
-def generate_response(prompt):
-    try:
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
-        )
-
-        return response.text
-
-    except Exception as e:
-        return f"AI Error: {str(e)}"
 
 
 def get_required_skills(goal):
